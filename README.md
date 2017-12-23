@@ -24,4 +24,4 @@ Windows の機能で __Alt+PrtScr__ を押したらクリップボードにア�
 バグを見つけた、こんな機能が欲しい、その他意見などありましたら、詳しい内容を __[Twitter](https://twitter.com/_karukaru_)__ または __[Issues](https://github.com/karukaru808/AltPlusPrtScr/issues)__ まで連絡下さい。自力でやれる方は __[Pull requests](https://github.com/karukaru808/AltPlusPrtScr/pulls)__ でもどうぞ。
 
 ## License
-このプラグインは[MITライセンス](https://github.com/karukaru808/AltPlusPrtScr/blob/master/LICENSE)の下で公開しています。
+このソフトウェアは[MITライセンス](https://github.com/karukaru808/AltPlusPrtScr/blob/master/LICENSE)の下で公開しています。
