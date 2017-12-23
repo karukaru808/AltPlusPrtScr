@@ -24,13 +24,13 @@ class ResidentTest : Form
     {
         this.ShowInTaskbar = false;
         this.setComponents();
-        
+
         timer.Tick += new EventHandler(this.KeysWatch_Tick);
         timer.Interval = 200;
 
         // タイマーを開始
         timer.Start();
-        
+
     }
 
     private void setComponents()
@@ -49,12 +49,12 @@ class ResidentTest : Form
         Item1.Text += "&一時停止";
         Item1.Click += new EventHandler(Toggle_Click);
         menu.Items.Add(Item1);
-        
+
         ToolStripMenuItem Item2 = new ToolStripMenuItem();
         Item2.Text = "&終了";
         Item2.Click += new EventHandler(Close_Click);
         menu.Items.Add(Item2);
-        
+
         icon.ContextMenuStrip = menu;
     }
 
@@ -79,8 +79,9 @@ class ResidentTest : Form
 
     private void Close_Click(object sender, EventArgs e)
     {
-        // タイマーを停止
+        // タイマーの後処理
         timer.Stop();
+        timer.Dispose();
 
         Application.Exit();
     }
@@ -106,27 +107,36 @@ class ResidentTest : Form
     {
         try
         {
-            // クリップボードにあるデータの取得
-            Image img = Clipboard.GetImage();
+            // フォルダパスを取得
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Screenshots";
 
-            // フォルダパスを取得してファイル名の決定
-            var pass = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Screenshots";
-            // 
-            int count = Directory.GetFiles(pass, "*.png", SearchOption.TopDirectoryOnly).Length;
-            for(int i = 1; i < count+1; i++)
+            // ディレクトリが存在しないなら作成
+            Directory.CreateDirectory(path);
+
+            // ディレクトリ内のpngファイルの数を取得
+            int count = Directory.GetFiles(path, "*.png", SearchOption.TopDirectoryOnly).Length;
+
+            // 若い数字からチェックしていき、空きがあったらその名前を登録
+            for (int i = 1; i <= count+1; i++)
             {
-                if (!File.Exists(pass + "\\スクリーンショット (" + i + ").png"))
+                if (!File.Exists(path + "\\スクリーンショット (" + i + ").png"))
                 {
-                    pass += "\\スクリーンショット (" + i + ").png";
+                    path += "\\スクリーンショット (" + i + ").png";
                     break;
                 }
             }
 
             //System.Diagnostics.Debug.WriteLine(count);
-            //System.Diagnostics.Debug.WriteLine(pass);
-            
+            //System.Diagnostics.Debug.WriteLine(path);
+
+            // クリップボードにあるデータの取得
+            Image img = Clipboard.GetImage();
+
             // PNG形式で保存する
-            img.Save(pass, System.Drawing.Imaging.ImageFormat.Png);
+            img.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+
+            //後処理
+            img.Dispose();
         }
         catch (Exception ex)
         {
@@ -134,3 +144,4 @@ class ResidentTest : Form
         }
     }
 }
+
