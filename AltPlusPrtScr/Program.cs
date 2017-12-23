@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 class MainWindow
@@ -8,19 +9,19 @@ class MainWindow
     [STAThread]
     static void Main()
     {
-        ResidentTest rm = new ResidentTest();
+        APPS apps = new APPS();
         Application.Run();
     }
 }
 
-class ResidentTest : Form
+class APPS : Form
 {
     [System.Runtime.InteropServices.DllImport("user32.dll")]
     private static extern int GetAsyncKeyState(int vKey);
 
     Timer timer = new Timer();
 
-    public ResidentTest()
+    public APPS()
     {
         this.ShowInTaskbar = false;
         this.setComponents();
@@ -36,7 +37,7 @@ class ResidentTest : Form
     private void setComponents()
     {
         // 現在のコードを実行しているAssemblyを取得
-        System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+        Assembly myAssembly = Assembly.GetExecutingAssembly();
 
         NotifyIcon icon = new NotifyIcon();
         icon.Icon = new Icon(myAssembly.GetManifestResourceStream("AltPlusPrtScr.app.ico"));
@@ -108,7 +109,7 @@ class ResidentTest : Form
         try
         {
             // フォルダパスを取得
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Screenshots";
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) + "\\Screenshots";
 
             // ディレクトリが存在しないなら作成
             Directory.CreateDirectory(path);
