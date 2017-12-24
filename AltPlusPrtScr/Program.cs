@@ -62,10 +62,10 @@ class APPS : Form
     private void Toggle_Click(object sender, EventArgs e)
     {
         ToolStripMenuItem item = (ToolStripMenuItem)sender;
-        //チェック状態を反転させる
+        // チェック状態を反転させる
         item.Checked = !item.Checked;
 
-        //trueなら一時停止、falseならstart
+        // trueなら一時停止、falseならstart
         if (item.Checked)
         {
             // タイマーを停止
@@ -106,6 +106,9 @@ class APPS : Form
 
     private void ImgSave()
     {
+        // 入れ物用意
+        Image img = null;
+
         try
         {
             // フォルダパスを取得
@@ -131,16 +134,27 @@ class APPS : Form
             //System.Diagnostics.Debug.WriteLine(path);
 
             // クリップボードにあるデータの取得
-            Image img = Clipboard.GetImage();
+            // クリップボードに画像データがない場合、戻り値はnull
+            img = Clipboard.GetImage();
 
             // PNG形式で保存する
+            // imgの中身がnullだと保存に失敗する
             img.Save(path, System.Drawing.Imaging.ImageFormat.Png);
 
-            //後処理
+            // 後処理
             img.Dispose();
         }
         catch (Exception ex)
         {
+            // imgがnullでDisposeするとエラーを吐く
+            if(img != null)
+            {
+                // 後処理
+                // 保存に失敗したときメモリを無限に消費するのを防ぐため
+                // 無限と言っても200MB以下で強制的にDisposeされるっぽい？
+                img.Dispose();
+            }
+
             //System.Diagnostics.Debug.WriteLine(ex);
         }
     }
