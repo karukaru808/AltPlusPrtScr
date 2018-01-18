@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -23,8 +24,10 @@ class APPS : Form
 
     public APPS()
     {
-        this.ShowInTaskbar = false;
-        this.setComponents();
+        ShowInTaskbar = false;
+        setComponents();
+
+        SystemEvents.SessionEnding += new SessionEndingEventHandler(Close_Click);
 
         timer.Tick += new EventHandler(this.KeysWatch_Tick);
         timer.Interval = 200;
@@ -84,6 +87,9 @@ class APPS : Form
         timer.Stop();
         timer.Dispose();
 
+        SystemEvents.SessionEnding -= new SessionEndingEventHandler(Close_Click);
+
+        Dispose();
         Application.Exit();
     }
 
@@ -121,7 +127,7 @@ class APPS : Form
             int count = Directory.GetFiles(path, "*.png", SearchOption.TopDirectoryOnly).Length;
 
             // 若い数字からチェックしていき、空きがあったらその名前を登録
-            for (int i = 1; i <= count+1; i++)
+            for (int i = 1; i <= count + 1; i++)
             {
                 if (!File.Exists(path + "\\スクリーンショット (" + i + ").png"))
                 {
@@ -147,7 +153,7 @@ class APPS : Form
         catch (Exception ex)
         {
             // imgがnullでDisposeするとエラーを吐く
-            if(img != null)
+            if (img != null)
             {
                 // 後処理
                 // 保存に失敗したときメモリを無限に消費するのを防ぐため
