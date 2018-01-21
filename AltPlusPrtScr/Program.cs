@@ -21,13 +21,16 @@ class APPS : Form
     private static extern int GetAsyncKeyState(int vKey);
 
     Timer timer = new Timer();
+    NotifyIcon icon = new NotifyIcon();
 
     public APPS()
     {
+        Text = "APPS";
         ShowInTaskbar = false;
         setComponents();
 
         SystemEvents.SessionEnding += new SessionEndingEventHandler(Close_Click);
+        Application.ApplicationExit += new EventHandler(Close_Click);
 
         timer.Tick += new EventHandler(this.KeysWatch_Tick);
         timer.Interval = 200;
@@ -42,7 +45,6 @@ class APPS : Form
         // 現在のコードを実行しているAssemblyを取得
         Assembly myAssembly = Assembly.GetExecutingAssembly();
 
-        NotifyIcon icon = new NotifyIcon();
         icon.Icon = new Icon(myAssembly.GetManifestResourceStream("AltPlusPrtScr.app.ico"));
         icon.Visible = true;
         icon.Text = "APPS";
@@ -87,9 +89,15 @@ class APPS : Form
         timer.Stop();
         timer.Dispose();
 
-        SystemEvents.SessionEnding -= new SessionEndingEventHandler(Close_Click);
+        // NotifyIconの後処理
+        icon.Dispose();
 
+        // 後処理
         Dispose();
+
+        SystemEvents.SessionEnding -= new SessionEndingEventHandler(Close_Click);
+        Application.ApplicationExit -= new EventHandler(Close_Click);
+
         Application.Exit();
     }
 
