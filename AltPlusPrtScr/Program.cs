@@ -29,11 +29,12 @@ class APPS : Form
         ShowInTaskbar = false;
         setComponents();
 
+        SystemEvents.SessionEnded += new SessionEndedEventHandler(Close_Click);
         SystemEvents.SessionEnding += new SessionEndingEventHandler(Close_Click);
         Application.ApplicationExit += new EventHandler(Close_Click);
 
         timer.Tick += new EventHandler(this.KeysWatch_Tick);
-        timer.Interval = 200;
+        timer.Interval = 50;
 
         // タイマーを開始
         timer.Start();
@@ -95,6 +96,7 @@ class APPS : Form
         // 後処理
         Dispose();
 
+        SystemEvents.SessionEnded -= new SessionEndedEventHandler(Close_Click);
         SystemEvents.SessionEnding -= new SessionEndingEventHandler(Close_Click);
         Application.ApplicationExit -= new EventHandler(Close_Click);
 
